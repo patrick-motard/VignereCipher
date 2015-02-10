@@ -10,31 +10,60 @@ namespace SimpleCipher
     class Program
     {
         public static string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        public static string key = "motard";
-        public static string text = "this is a test meepo just a test";
+        public static string key = "doggy";
+        public static string text = "thisisatestmeepo";
 
         public static string VigenereCipher(string key, string text)
         {
 
-            int increment = 0, keyIndex = -1;
+            int textIndex = 0, keyIndex = -1;
 
             string encryptedText = "";
 
-            while (increment < text.Length)
+            while (textIndex < text.Length)
             {
-                char nextLetterFromText = text[increment];
+                char textLetter = text[textIndex];
+
                 keyIndex = GetKeyIndex(key, keyIndex);
 
+                var keyLetter = key[keyIndex];
+
+                var shiftAmount = FindIndexInAlpha(keyLetter);
+
+                var indexOfTextLetterInAlpha = FindIndexInAlpha(textLetter);
+
+                indexOfTextLetterInAlpha += shiftAmount;
+
+                indexOfTextLetterInAlpha = WrapIndex(indexOfTextLetterInAlpha);
+
+                textLetter = alpha[indexOfTextLetterInAlpha];
+
+                encryptedText += textLetter;
+
+                textIndex++;
             }
 
-            return "";
+            return encryptedText;
+        }
+
+        public static int WrapIndex(int index)
+        {
+            if (index <= 25)
+            {
+                return index;
+            }
+            else
+            {
+                index = index - 25;
+                return index;
+            }
         }
 
         public static int GetKeyIndex(string key, int previousIndex)
         {
             if (previousIndex + 1 >= key.Length)
             {
-                previousIndex = -1;
+                previousIndex = 0;
                 return previousIndex;
             }
             else
@@ -46,6 +75,7 @@ namespace SimpleCipher
 
         public static int FindIndexInAlpha(char c)
         {
+            c = Char.ToUpper(c);
             for (int i = 0; i < alpha.Length; i++)
             {
                 char l = alpha[i];
@@ -59,6 +89,8 @@ namespace SimpleCipher
 
         static void Main(string[] args)
         {
+            var ecrypte = VigenereCipher(key, text);
+            Console.WriteLine(ecrypte);
             string directory = Directory.GetCurrentDirectory();
             char newCharacter = 'D';
             Console.WriteLine(FindIndexInAlpha(newCharacter));
