@@ -8,7 +8,6 @@ namespace SimpleCipher
 {
     class Vignere
     {
-        public static string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public static string Cipher(string key, string text)
         {
@@ -25,15 +24,15 @@ namespace SimpleCipher
 
                 var keyLetter = key[keyIndex];
 
-                var shiftAmount = FindIndexInAlpha(keyLetter);
+                var shiftAmount = Common.FindIndexInAlpha(keyLetter);
 
-                var indexOfTextLetterInAlpha = FindIndexInAlpha(textLetter);
+                var indexOfTextLetterInAlpha = Common.FindIndexInAlpha(textLetter);
 
                 indexOfTextLetterInAlpha += shiftAmount;
 
                 indexOfTextLetterInAlpha = WrapIndex(indexOfTextLetterInAlpha);
 
-                textLetter = alpha[indexOfTextLetterInAlpha];
+                textLetter = Common.alpha[indexOfTextLetterInAlpha];
 
                 encryptedText += textLetter;
 
@@ -70,18 +69,6 @@ namespace SimpleCipher
             };
         }
 
-        public static int FindIndexInAlpha(char c)
-        {
-            c = Char.ToUpper(c);
-            for (int i = 0; i < alpha.Length; i++)
-            {
-                char l = alpha[i];
-                if (l == c)
-                {
-                    return i;
-                };
-            };
-            return -1;
-        }
+
     }
 }

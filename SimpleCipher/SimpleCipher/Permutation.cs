@@ -26,5 +26,16 @@ namespace SimpleCipher
             }
             return columnizedText;
         }
+
+        public static List<int> KeyToAlphaIndex(string key)
+        {
+            List<int> keyIndexsInAlpha = new List<int>();
+
+            for (int i = 0; i < key.Length; i++)
+            {
+                keyIndexsInAlpha.Add(Common.FindIndexInAlpha(key[i]));
+            }
+            return keyIndexsInAlpha;
+        }
     }
 }
