@@ -37,5 +37,25 @@ namespace SimpleCipher
             }
             return keyIndexsInAlpha;
         }
+
+        public static List<int> Permutate(string key)
+        {
+            var chicken = KeyToAlphaIndex(key);
+            List<int> dog = new List<int>(chicken);
+            dog.Sort();
+            List<int> shiftAmounts = new List<int>();
+
+            for (int i = 0; i < chicken.Count; i++)
+            {
+                for (int j = 0; j < dog.Count; j++)
+                {
+                    if (chicken[i] == dog[j])
+                    {
+                        shiftAmounts.Add(j);
+                    }
+                }
+            }
+            return shiftAmounts;
+        }
     }
 }

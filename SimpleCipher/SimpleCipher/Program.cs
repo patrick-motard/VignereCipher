@@ -10,7 +10,7 @@ namespace SimpleCipher
     class Program
     {
 
-        public static string key = "doggy";
+        public static string key = "dogies";
         public static string text = "thisisatestmeepo";
 
         
@@ -20,7 +20,7 @@ namespace SimpleCipher
             var ecrypte = Vignere.Cipher(key, text);
             Console.WriteLine(ecrypte);
             string directory = Directory.GetCurrentDirectory();
-
+            Permutation.Permutate(key);
             Console.WriteLine(directory);
             Console.ReadLine();
 
