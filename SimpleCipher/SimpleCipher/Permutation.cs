@@ -8,6 +8,15 @@ namespace SimpleCipher
 {
     class Permutation
     {
+        public Permutation(string key, string cipherText)
+        {
+            this._cipherText = cipherText;
+            this._key = key;
+            this._dog = "dog";
+
+        }
+
+
         public static List<string> Columnize(string text, string key)
         {
             List<string> columnizedText = new List<string>();
@@ -57,5 +66,16 @@ namespace SimpleCipher
             }
             return shiftAmounts;
         }
+
+        public static void ShiftSubset(string subset)
+        {
+
+        }
+
+        private List<int> _orderedAlphaIndexes = null;
+        private string _key;
+        private string _cipherText { get; set; }
+
+        private string _dog { get; set; }
     }
 }
