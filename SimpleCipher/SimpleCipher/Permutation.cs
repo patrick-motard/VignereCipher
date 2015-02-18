@@ -10,33 +10,39 @@ namespace SimpleCipher
     {
         public Permutation(string key, string cipherText)
         {
-            this._cipherText = cipherText;
-            this._key = key;
-            this._dog = "dog";
-
+            _cipherText = cipherText;
+            _key = key;
+            _shiftAmounts = new List<int>();
+            _orderedAlphaIndexes = new List<int>();
+            _subsets = new List<string>();
         }
 
 
-        public static List<string> Columnize(string text, string key)
+        private static List<string> Columnize()
         {
-            List<string> columnizedText = new List<string>();
 
-            for (int i = 1; i < text.Length; i++){
-                if (i % key.Length == 0){
-                    columnizedText.Add(text.Substring(i - key.Length, key.Length));
+            for (int i = 1; i < _cipherText.Length; i++){
+                if (i % _key.Length == 0){
+                    _subsets.Add(_cipherText.Substring(i - _key.Length, _key.Length));
                 }
             }
 
-            var remainder = text.Length % key.Length;
+            var remainder = _cipherText.Length % _key.Length;
             if (remainder != 0)
             {
-                var startingIndexOfLastChunk = text.Length - remainder;
-                columnizedText.Add(text.Substring(startingIndexOfLastChunk, remainder));
+                var startingIndexOfLastChunk = _cipherText.Length - remainder;
+                string lastChunk = _cipherText.Substring(startingIndexOfLastChunk, remainder);
+                int amountToAppendAtEnd = _key.Length - lastChunk.Length;
+                for (int i = 0; i < amountToAppendAtEnd; i++)
+                {
+                    lastChunk += "k";
+                }
+                    _subsets.Add(lastChunk);
             }
-            return columnizedText;
+            return _subsets;
         }
 
-        public static List<int> KeyToAlphaIndex(string key)
+        private static List<int> KeyToAlphaIndex(string key)
         {
             List<int> keyIndexsInAlpha = new List<int>();
 
@@ -47,35 +53,58 @@ namespace SimpleCipher
             return keyIndexsInAlpha;
         }
 
-        public static List<int> Permutate(string key)
+        private static void Permutate()
         {
-            var chicken = KeyToAlphaIndex(key);
-            List<int> dog = new List<int>(chicken);
-            dog.Sort();
-            List<int> shiftAmounts = new List<int>();
+            var alphaIndexes = KeyToAlphaIndex(_key);
+            List<int> sortedAlphaIndexes = new List<int>(alphaIndexes);
+            sortedAlphaIndexes.Sort();
 
-            for (int i = 0; i < chicken.Count; i++)
+            for (int i = 0; i < alphaIndexes.Count; i++)
             {
-                for (int j = 0; j < dog.Count; j++)
+                for (int j = 0; j < sortedAlphaIndexes.Count; j++)
                 {
-                    if (chicken[i] == dog[j])
+                    if (alphaIndexes[i] == sortedAlphaIndexes[j])
                     {
-                        shiftAmounts.Add(j);
+                        _shiftAmounts.Add(j);
                     }
                 }
             }
-            return shiftAmounts;
         }
 
-        public static void ShiftSubset(string subset)
+        private static string ShiftSubset(string subset)
         {
+            string shiftedSubset = "";
+            string[] shiftedSubsetArray = new string[subset.Length];
 
+            for (int i = 0; i < subset.Length; i++)
+            {
+                shiftedSubsetArray[_shiftAmounts[i]] = subset[i].ToString();
+            }
+            for (int j = 0; j < shiftedSubsetArray.Length; j++)
+            {
+                shiftedSubset += shiftedSubsetArray[j];
+            }
+            return shiftedSubset;
         }
 
-        private List<int> _orderedAlphaIndexes = null;
-        private string _key;
-        private string _cipherText { get; set; }
+        public static string Encrypt()
+        {
+            
+            Columnize();
+            Permutate();
+            for (int i = 0; i < _subsets.Count; i++)
+            {
+                _encryptedText += ShiftSubset(_subsets[i]);
 
-        private string _dog { get; set; }
+            }
+                return _encryptedText;
+        }
+
+        private static List<string> _subsets;
+        private List<int> _orderedAlphaIndexes;
+        private static List<int> _shiftAmounts;
+        private static string _key;
+        private static string _cipherText;
+        private static string _encryptedText;
     }
 }

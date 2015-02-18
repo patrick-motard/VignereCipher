@@ -11,7 +11,6 @@ namespace SimpleCipher
 
         public static string Cipher(string key, string text)
         {
-
             int textIndex = 0, keyIndex = -1;
 
             string encryptedText = "";
